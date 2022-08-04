@@ -39,6 +39,9 @@ def test_main():
     # deploy instance
     image_file = Path(__file__).resolve().parent.parent.joinpath("sabana.json")
     inst = Instance(image_file=image_file, verbose=True)
+    # if you want to test the image without building it
+    # uncomment the following line:
+    #inst = Instance(image="robot/hello_world:0.1.0", verbose=True)
     inst.up()
     # run program
     responses = inst.execute(program)

@@ -41,7 +41,7 @@ def create_main(message=None, file=None):
 
     print(f"Message to be sent: {msg}")
 
-    program = '#include "firmware.h"\n'
+    program = '#include "print.h"\n'
     program += "int main(int argc, char ** argv){\n"
     program += f'print_str("{header}");\n'
     program += f'print_str("{msg}");\n'
@@ -69,7 +69,7 @@ def create_main_bin(message=None):
         create_main(message=message, file=temp)
         build.file(temp)
         build.file(cwd.joinpath("cc/print.c"))
-        build.file(cwd.joinpath("cc/firmware.h"))
+        build.file(cwd.joinpath("cc/print.h"))
         build.file(cwd.joinpath("cc/boot.S"))
         build.file(cwd.joinpath("cc/picorv32.ld"), flags="-Bstatic -T")
         try:
@@ -130,6 +130,9 @@ def test_main(message=None):
     # deploy instance
     image_file = Path(__file__).resolve().parent.parent.joinpath("sabana.json")
     inst = Instance(image_file=image_file, verbose=True)
+    # if you want to test the image without building it
+    # uncomment the following line:
+    #inst = Instance(image="robot/rtl_ez_picorv32_128k:0.1.0", verbose=True)
     inst.up()
 
     # run program

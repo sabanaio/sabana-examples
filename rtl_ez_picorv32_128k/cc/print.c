@@ -15,7 +15,7 @@
 // Original from:
 // https://github.com/YosysHQ/picorv32/blob/master/firmware/print.c
 
-#include "firmware.h"
+#include "print.h"
 
 #define OUTPORT 0x1FC00
 static uint8_t* cursor = OUTPORT;

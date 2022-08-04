@@ -1,0 +1,68 @@
+{
+  "name": "rtl_ez_queues",
+  "tag": "0.1.0",
+  "language": "verilog",
+  "shell": {
+    "mmio": {
+      "base_address": "0xa0000000",
+      "size": "0x00010000",
+      "values": [
+        {
+          "name": "control",
+          "offset": "0x0",
+          "data_type": "int32"
+        },
+        {
+          "name": "a_read_data",
+          "offset": "0x10",
+          "data_type": "int64"
+        },
+        {
+          "name": "a_read_length",
+          "offset": "0x1c",
+          "data_type": "int32"
+        },
+        {
+          "name": "b_read_data",
+          "offset": "0x24",
+          "data_type": "int64"
+        },
+        {
+          "name": "b_read_length",
+          "offset": "0x30",
+          "data_type": "int32"
+        },
+        {
+          "name": "y_write_data",
+          "offset": "0x38",
+          "data_type": "int64"
+        },
+        {
+          "name": "y_write_length",
+          "offset": "0x44",
+          "data_type": "int32"
+        }
+      ]
+    },
+    "queue": [
+      {
+        "name": "a",
+        "data_width": "32",
+        "length": "64",
+        "state": "read"
+      },
+      {
+        "name": "b",
+        "data_width": "32",
+        "length": "64",
+        "state": "read"
+      },
+      {
+        "name": "y",
+        "data_width": "32",
+        "length": "64",
+        "state": "write"
+      }
+    ]
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "name": "c_axi_array_add_constant",
+  "tag": "0.1.0",
+  "language": "cpp",
+  "shell": {
+    "axi4_lite": [
+      {
+        "name": "c0",
+        "data_width": "32",
+        "mmio": {
+          "base_address": "0xa0000000",
+          "size": "0x00010000",
+          "values": [
+            {
+              "name": "control",
+              "offset": "0x0",
+              "data_type": "int32"
+            },
+            {
+              "name": "size",
+              "offset": "0x10",
+              "data_type": "int32"
+            },
+            {
+              "name": "a",
+              "offset": "0x18",
+              "data_type": "int64"
+            }
+          ]
+        },
+        "args": [
+          {
+            "name": "size",
+            "data_type": "int32",
+            "state": "read"
+          }
+        ]
+      }
+    ],
+    "axi4": [
+      {
+        "name": "m0",
+        "data_width": "32",
+        "args": [
+          {
+            "name": "a",
+            "data_type": "int32",
+            "state": "readwrite"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,94 @@
+{
+  "name": "c_axi_systolic_gemm_16x16_float",
+  "tag": "0.1.0",
+  "language": "cpp",
+  "shell": {
+    "axi4_lite": [
+      {
+        "name": "c0",
+        "data_width": "32",
+        "mmio": {
+          "base_address": "0xa0000000",
+          "size": "0x00010000",
+          "values": [
+            {
+              "name": "control",
+              "offset": "0x0",
+              "data_type": "int32"
+            },
+            {
+              "name": "a_row",
+              "offset": "0x10",
+              "data_type": "int32"
+            },
+            {
+              "name": "a_col",
+              "offset": "0x18",
+              "data_type": "int32"
+            },
+            {
+              "name": "b_col",
+              "offset": "0x20",
+              "data_type": "int32"
+            },
+            {
+              "name": "a",
+              "offset": "0x28",
+              "data_type": "int64"
+            },
+            {
+              "name": "b",
+              "offset": "0x34",
+              "data_type": "int64"
+            },
+            {
+              "name": "c",
+              "offset": "0x40",
+              "data_type": "int64"
+            }
+          ]
+        },
+        "args": [
+          {
+            "name": "a_row",
+            "data_type": "int32",
+            "state": "read"
+          },
+          {
+            "name": "a_col",
+            "data_type": "int32",
+            "state": "read"
+          },
+          {
+            "name": "b_col",
+            "data_type": "int32",
+            "state": "read"
+          }
+        ]
+      }
+    ],
+    "axi4": [
+      {
+        "name": "m0",
+        "data_width": "32",
+        "args": [
+          {
+            "name": "a",
+            "data_type": "fp32",
+            "state": "read"
+          },
+          {
+            "name": "b",
+            "data_type": "fp32",
+            "state": "read"
+          },
+          {
+            "name": "c",
+            "data_type": "fp32",
+            "state": "readwrite"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "name": "rtl_ez_picorv32_128k",
+  "tag": "0.1.0",
+  "language": "verilog",
+  "shell": {
+    "mmio": {
+      "base_address": "0xa0000000",
+      "size": "0x00010000",
+      "values": [
+        {
+          "name": "control",
+          "offset": "0x0",
+          "data_type": "int32"
+        },
+        {
+          "name": "a_read_data",
+          "offset": "0x10",
+          "data_type": "int64"
+        },
+        {
+          "name": "a_read_length",
+          "offset": "0x1c",
+          "data_type": "int32"
+        },
+        {
+          "name": "a_write_data",
+          "offset": "0x24",
+          "data_type": "int64"
+        },
+        {
+          "name": "a_write_length",
+          "offset": "0x30",
+          "data_type": "int32"
+        }
+      ]
+    },
+    "register": [],
+    "queue": [],
+    "ram": [
+      {
+        "name": "a",
+        "data_width": "32",
+        "length": "32768",
+        "state": "readwrite"
+      }
+    ]
+  }
+}

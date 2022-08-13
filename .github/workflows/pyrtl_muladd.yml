@@ -1,0 +1,36 @@
+on:
+  workflow_dispatch
+
+env:
+  SABANA_ACCESS_TOKEN: ${{secrets.SABANA_ACCESS_TOKEN}}
+  SABANA_ID_TOKEN: ${{secrets.SABANA_ID_TOKEN}}
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.9"
+      - name: Install sabana Python SDK
+        run: |
+          python -m pip install sabana
+          python -c "import sabana; print(sabana.__version__)"
+      - name: Install PyRTL
+        run: |
+          python -m pip install pyrtl
+          python -c "import pyrtl"
+      - name: Generate RTL
+        run: |
+          python ./pyrtl_muladd/tests/pyrtl_muladd.py
+      - name: Download sabana CLI
+        run: |
+          curl https://sabana.s3.us-west-2.amazonaws.com/cli/sabana_linux_x86_64_v0.1.4.tar.gz --output sabana.tar.gz && tar xf sabana.tar.gz && rm sabana.tar.gz
+      - name: Push project
+        run: |
+          cd pyrtl_muladd && ../sabana push
+      - name: Test project
+        run: |
+          python ./pyrtl_muladd/tests/test_pyrtl_muladd.py

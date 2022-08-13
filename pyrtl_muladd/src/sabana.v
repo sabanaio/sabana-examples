@@ -32,7 +32,7 @@ module sabana (
       is_finish <= start;
 
   toplevel toplevel_i (
-    .clock(clock),
+    .clk(clock),
     .rst(reset),
     .a(a_in),
     .b(b_in),

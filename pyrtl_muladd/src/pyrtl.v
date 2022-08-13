@@ -2,8 +2,8 @@
 // As one initial test of synthesis, map to FPGA with:
 //   yosys -p "synth_xilinx -top toplevel" thisfile.v
 
-module toplevel(clock, rst, a, b, c, y);
-    input clock;
+module toplevel(clk, rst, a, b, c, y);
+    input clk;
     input rst;
     input[31:0] a;
     input[31:0] b;

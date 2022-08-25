@@ -49,7 +49,7 @@ def test_main():
     inst = Instance(image_file=image_file, verbose=True)
     # if you want to test the image without building it
     # uncomment the following line:
-    #inst = Instance(image="robot/c_axi_array_add_constant:0.1.0", verbose=True)
+    # inst = Instance(image="robot/c_axi_array_add_constant:0.1.0", verbose=True)
     inst.up()
 
     # run program

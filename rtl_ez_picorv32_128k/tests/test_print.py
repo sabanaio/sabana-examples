@@ -28,7 +28,7 @@ def create_main(message=None, file=None):
     Creates a c program that prints the string provided in message
     """
     header = "Greetings, I am your RISC-V CPU. This was your message:\\n"
-    if message == None:
+    if message is None:
         select = choice([i for i in range(3)])
         msg = list(["Bubbly beer", "Meerkat flies", "Happy day"])[select]
     else:
@@ -132,7 +132,7 @@ def test_main(message=None):
     inst = Instance(image_file=image_file, verbose=True)
     # if you want to test the image without building it
     # uncomment the following line:
-    #inst = Instance(image="robot/rtl_ez_picorv32_128k:0.1.0", verbose=True)
+    # inst = Instance(image="robot/rtl_ez_picorv32_128k:0.1.0", verbose=True)
     inst.up()
 
     # run program

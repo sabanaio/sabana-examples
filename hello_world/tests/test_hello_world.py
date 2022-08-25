@@ -15,15 +15,12 @@
 from pathlib import Path
 import numpy as np
 from sabana import Instance, Program
+from random import randint
 
 
-def test_main():
-    # create inputs
-    m = 64
-    dtype = np.int8
-    shape = (4,)
-    a = np.random.randint(m, size=shape, dtype=dtype)
-    b = np.random.randint(m, size=shape, dtype=dtype)
+def create_program(ai, bi):
+    a = np.array([ai], dtype=np.int32)
+    b = np.array([bi], dtype=np.int32)
     start = np.array([1], dtype=np.int32)
     finish = np.array([14], dtype=np.int32)
     # create a program
@@ -34,23 +31,49 @@ def test_main():
     program.mmio_write(b, name=ctrl, offset=0x18)
     program.mmio_write(start, name=ctrl, offset=0x0)
     program.mmio_wait(finish, name=ctrl, offset=0x0, timeout=1)
-    program.mmio_read(name=ctrl, offset=0x20, dtype=dtype, shape=shape)
+    program.mmio_read(name=ctrl, offset=0x20, dtype=a.dtype.type, shape=a.shape)
     program.mmio_dealloc(name=ctrl)
-    # deploy instance
-    image_file = Path(__file__).resolve().parent.parent.joinpath("sabana.json")
-    inst = Instance(image_file=image_file, verbose=True)
-    # if you want to test the image without building it
-    # uncomment the following line:
-    #inst = Instance(image="robot/hello_world:0.1.0", verbose=True)
-    inst.up()
-    # run program
-    responses = inst.execute(program)
-    # terminate instance
-    inst.down()
-    # check results
-    expected = a + b
-    assert np.array_equal(expected, responses[0])
-    print("Added two numpy arrays successfully")
+    return program
+
+
+class Driver:
+    def __init__(self):
+        print("Every run is a round-trip to a cloud FPGA...")
+        print("Initializing instance...")
+        image_file = Path(__file__).resolve().parent.parent.joinpath("sabana.json")
+        self.inst = Instance(image_file=image_file)
+        self.inst.up()
+
+    def run(self, program):
+        return self.inst.execute(program)
+
+    def __del__(self):
+        print("Terminating instance...")
+        self.inst.down()
+
+
+def create_function():
+    driver = Driver()
+
+    def func(a, b):
+        prog = create_program(a, b)
+        res = driver.run(prog)
+        return res[0][0]
+
+    return func
+
+
+def test_main():
+    f = create_function()
+    m = 8192
+
+    for i in range(5):
+        a = randint(0, m)
+        b = randint(0, m)
+        exp = a + b
+        res = f(a, b)
+        print(f"run:{i} python:{exp} fpga:{res}")
+        assert exp == res
 
 
 if __name__ == "__main__":

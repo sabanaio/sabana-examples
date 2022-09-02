@@ -21,7 +21,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
-        run: python -m pip install pytest pyrtl sabana
+        run: python -m pip install pytest pyrtl sabana==0.1.22a1
       - name: Run Integer
         working-directory: ./c_axi_systolic_gemm_16x16_int/tests
         run: pytest .

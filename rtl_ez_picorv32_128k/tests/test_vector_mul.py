@@ -120,7 +120,7 @@ def create_program(inputs):
 
 
 def check_results(expected, results):
-    assert np.array_equal(expected, results[0])
+    assert np.array_equal(expected, results[2])
 
 
 def test_main():

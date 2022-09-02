@@ -143,7 +143,7 @@ def test_main(message=None):
 
     # print messsage from CPU
     print("\nRemote message:\n")
-    print(responses[0].tobytes().decode("utf-8"), "\n")
+    print(responses[2].tobytes().decode("utf-8"), "\n")
 
 
 if __name__ == "__main__":

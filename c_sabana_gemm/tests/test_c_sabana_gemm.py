@@ -50,7 +50,7 @@ def test_main():
     # terminate instance
     inst.down()
     # check results
-    assert np.array_equal(responses[0], np.matmul(a, b))
+    assert np.array_equal(responses[3], np.matmul(a, b))
     print("Multiplied two random 4x4 matrices successfully!")
 
 

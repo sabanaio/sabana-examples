@@ -62,7 +62,7 @@ def test_main():
     inst.down()
     # check results
     expected = a + b
-    assert np.array_equal(expected, responses[0])
+    assert np.array_equal(expected, responses[3])
     print("Added two numpy array successfully")
 
 

@@ -71,7 +71,7 @@ def create_program(inputs):
 
 
 def check_results(expected, results):
-    assert results[0][0] == expected
+    assert results[2][0] == expected
 
 
 def test_main():

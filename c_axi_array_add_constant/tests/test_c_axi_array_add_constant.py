@@ -59,7 +59,7 @@ def test_main():
     inst.down()
 
     # check results
-    assert np.array_equal(responses[0], a + 100)
+    assert np.array_equal(responses[1], a + 100)
     print("Check OK!")
     print("Adding 100 to a vector of random integers was successful in Sabana!")
 

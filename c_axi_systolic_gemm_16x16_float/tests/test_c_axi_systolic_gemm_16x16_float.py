@@ -61,7 +61,7 @@ def create_function():
     def func(a, b):
         prog = create_program(a, b)
         res = driver.run(prog)
-        return res[0]
+        return res[3]
 
     return func
 

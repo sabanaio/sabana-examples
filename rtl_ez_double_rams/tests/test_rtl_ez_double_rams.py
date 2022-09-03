@@ -59,7 +59,7 @@ def test_main():
     inst.down()
     # check results
     expected = a + b[0]
-    assert np.array_equal(expected, responses[0])
+    assert np.array_equal(expected, responses[2])
     print("Added constant to numpy array successfully")
 
 

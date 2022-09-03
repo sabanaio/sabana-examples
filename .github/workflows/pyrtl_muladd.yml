@@ -1,5 +1,4 @@
-on:
-  workflow_dispatch
+on: workflow_dispatch
 
 env:
   SABANA_ACCESS_TOKEN: ${{secrets.SABANA_ACCESS_TOKEN}}
@@ -16,7 +15,7 @@ jobs:
           python-version: "3.9"
       - name: Install sabana Python SDK
         run: |
-          python -m pip install sabana
+          python -m pip install sabana==0.1.22a1
           python -c "import sabana; print(sabana.__version__)"
       - name: Install PyRTL
         run: |

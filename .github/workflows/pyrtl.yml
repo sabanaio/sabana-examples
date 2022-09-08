@@ -1,3 +1,5 @@
+name: PyRTL
+
 on: workflow_dispatch
 
 env:
@@ -5,7 +7,7 @@ env:
   SABANA_ID_TOKEN: ${{secrets.SABANA_ID_TOKEN}}
 
 jobs:
-  pyrtl_muladd:
+  e2e:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3

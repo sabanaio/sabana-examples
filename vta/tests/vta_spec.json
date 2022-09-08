@@ -1,0 +1,48 @@
+{
+  "width": {
+    "instruction": 128,
+    "flag": 1,
+    "opcode": 3,
+    "alu_opcode": 3,
+    "alu_imm": 16,
+    "alu_empty": 1,
+    "gemm_empty": 1,
+    "mem_empty": 6,
+    "mem_id": 3,
+    "mem_size": 16,
+    "mem_stride": 16,
+    "mem_pad": 4,
+    "mem_sram": 16,
+    "mem_dram": 32,
+    "uop_begin": 13,
+    "uop_end": 14,
+    "iter": 14,
+    "dst_factor": 11,
+    "src_factor": 11,
+    "wgt_factor": 10
+  },
+  "value": {
+    "opcode": {
+      "load": 0,
+      "store": 1,
+      "gemm": 2,
+      "finish": 3,
+      "alu": 4
+    },
+    "alu_opcode": {
+      "min": 0,
+      "max": 1,
+      "add": 2,
+      "shr": 3,
+      "mul": 4
+    },
+    "mem_id": {
+      "uop": 0,
+      "wgt": 1,
+      "inp": 2,
+      "acc": 3,
+      "out": 4,
+      "acc_8bit": 5
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "name": "vta",
+  "tag": "0.1.0",
+  "language": "verilog",
+  "shell": {
+    "axi4_lite": [
+      {
+        "name": "c0",
+        "data_width": "32",
+        "base_address": "0xa0000000",
+        "size": "0x00010000"
+      }
+    ],
+    "axi4": [
+      {
+        "name": "m0",
+        "data_width": "64"
+      }
+    ]
+  }
+}

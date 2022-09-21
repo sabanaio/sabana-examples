@@ -46,4 +46,4 @@ jobs:
         working-directory: ./
         # Do not include any examples with external dependencies here.
         # Add a separate workflow, see pyrtl.yml for reference.
-        run: pytest --ignore=pyrtl_muladd .
+        run: pytest --ignore=pyrtl_muladd --ignore=tensul --ignore=3rd_party .

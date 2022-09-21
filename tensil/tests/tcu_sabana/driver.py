@@ -29,67 +29,59 @@ from tcu_pynq.model import model_from_json
 from tcu_pynq.architecture import pynqz1
 
 
-class SabanaSpecific:
+def buffer_chunk_write(
+    data=None, buffer=None, inst=None, offset=None, chunk_size=None
+):
     """
-    Support class to encapsulate functions specific to Sabana
+    Executes buffer writes in chunks of 1MBytes, the largest
+    supported payload by xfer in Sabana
     """
+    if not isinstance(data, np.ndarray):
+        raise RuntimeError("Buffer chunk write error: data must be a numpy array")
+    if (not isinstance(buffer, str)) or (len(buffer) == 0):
+        raise RuntimeError(
+            "Buffer chunk write error: buffer must be non empty string"
+        )
+    if not isinstance(offset, int) or offset < 0:
+        raise RuntimeError(
+            "Buffer chunk write error: offset needds to be a positive integer"
+        )
+    if not isinstance(inst, Instance):
+        raise RuntimeError(
+            "Buffer chunk write error: inst must be of type sabana.Instance"
+        )
+    if not inst.is_up:
+        raise RuntimeError(
+            "Buffer chunk write error: the instance must be up before invoking buffer-chunk-write"
+        )
 
-    def __init__():
-        pass
-
-    def buffer_chunk_write(
-        data=None, buffer=None, inst=None, offset=None, chunk_size=None
-    ):
-        """
-        Executes buffer writes in chunks of 1MBytes, the largest
-        supported payload by xfer in Sabana
-        """
-        if not isinstance(data, np.ndarray):
-            raise RuntimeError("Buffer chunk write error: data must be a numpy array")
-        if (not isinstance(buffer, str)) or (len(buffer) == 0):
+    max_chunk_size = 1 << 20
+    if chunk_size is None:
+        chunk_size = max_chunk_size
+    else:
+        if chunk_size > max_chunk_size:
             raise RuntimeError(
-                "Buffer chunk write error: buffer must be non empty string"
+                f"Chunk size must be a positive integer smaller than: {max_chunk_size}"
             )
-        if not isinstance(offset, int) or offset < 0:
-            raise RuntimeError(
-                "Buffer chunk write error: offset needds to be a positive integer"
-            )
-        if not isinstance(inst, Instance):
-            raise RuntimeError(
-                "Buffer chunk write error: inst must be of type sabana.Instance"
-            )
-        if not inst.is_up:
-            raise RuntimeError(
-                "Buffer chunk write error: the instance must be up before invoking buffer-chunk-write"
-            )
-
-        max_chunk_size = 1 << 20
-        if chunk_size is None:
-            chunk_size = max_chunk_size
+    total_length = data.nbytes
+    bytes_left = total_length
+    for i in range(div_ceil(total_length, chunk_size)):
+        prog = Program()
+        iter_offset = i * chunk_size
+        chunk = chunk_size if bytes_left > chunk_size else bytes_left
+        top = iter_offset + chunk
+        prog.buffer_write(
+            data=data[iter_offset:top], name=buffer, offset=offset + iter_offset
+        )
+        try:
+            inst.execute(program=prog)
+        except Exception as e:
+            print(f"Failed buffer chunk write on iteration {i}")
+            print(str(e))
+            inst.down()
+            raise RuntimeError() from e
         else:
-            if chunk_size > max_chunk_size:
-                raise RuntimeError(
-                    f"Chunk size must be a positive integer smaller than: {max_chunk_size}"
-                )
-        total_length = data.nbytes
-        bytes_left = total_length
-        for i in range(div_ceil(total_length, chunk_size)):
-            prog = Program()
-            iter_offset = i * chunk_size
-            chunk = chunk_size if bytes_left > chunk_size else bytes_left
-            top = iter_offset + chunk
-            prog.buffer_write(
-                data=data[iter_offset:top], name=buffer, offset=offset + iter_offset
-            )
-            try:
-                inst.execute(program=prog)
-            except Exception as e:
-                print(f"Failed buffer chunk write on iteration {i}")
-                print(str(e))
-                inst.down()
-                raise RuntimeError() from e
-            else:
-                bytes_left = bytes_left - chunk
+            bytes_left = bytes_left - chunk
 
 
 class Mem:
@@ -149,7 +141,7 @@ class Mem:
             offset_bytes = offset * self.data_type_numpy_size_bytes
         if self.debug:
             print(f"{self.name} Mem: doing write of {data.nbytes} bytes")
-        SabanaSpecific.buffer_chunk_write(
+        buffer_chunk_write(
             data=data, buffer=self.name, offset=offset_bytes, inst=self.inst
         )
 
@@ -172,7 +164,7 @@ class Mem:
         data = np.frombuffer(data, dtype=np.uint8)
         if self.debug:
             print(f"{self.name} Mem: doing write-bytes of {data.nbytes} bytes")
-        SabanaSpecific.buffer_chunk_write(
+        buffer_chunk_write(
             data=data, buffer=self.name, offset=offset_bytes, inst=self.inst
         )
 
@@ -365,7 +357,7 @@ class Driver:
             print(str(e))
             raise RuntimeError(msg)
 
-        SabanaSpecific.buffer_chunk_write(
+        buffer_chunk_write(
             data=data, buffer=buffer_name, offset=0, inst=self.inst
         )
 

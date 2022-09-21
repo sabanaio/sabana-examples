@@ -16,17 +16,4 @@ from collections import namedtuple
 from tcu_pynq.data_type import DataType
 from tcu_pynq.architecture import pynqz1
 
-TensilImage = namedtuple(
-    "TensilImage",
-    [
-        "image_name",  # str
-        "arch",  # Architecture
-        "max_dma_buffer_size",  # int
-    ],
-)
-
-luis = TensilImage(
-    image_name="luis/tensil:0.1.0",
-    arch=pynqz1,
-    max_dma_buffer_size=2 << 26,
 )

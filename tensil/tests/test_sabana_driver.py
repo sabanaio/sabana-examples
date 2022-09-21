@@ -16,7 +16,6 @@ from tcu_pynq.data_type import data_type_numpy, one
 from tcu_pynq.instruction import DataMoveFlag
 from tcu_pynq.util import pad_to
 from tcu_sabana.driver import Driver
-from tcu_sabana.tensil_images import luis
 from collections import namedtuple
 import numpy as np
 
@@ -164,12 +163,6 @@ def test_dram1(driver):
     func_print(fname, "OK - data from dram1 matches")
 
 
-def test_load_resnet(driver):
-    fname = "load_resnet"
-    driver.load_model("./resnet20v2_cifar_onnx_pynqz1.tmodel")
-    func_print(fname, "OK - loaded model without errors")
-
-
 def test_xor(driver):
     fname = "xor_model"
     test_case = [
@@ -191,12 +184,11 @@ def test_xor(driver):
 
 if __name__ == "__main__":
     print("Initializing driver object...")
-    driver = Driver(image=luis, debug=False)
+    driver = Driver(image="luis/tensil:0.1.0", debug=False)
     test_local_memory(driver)
     test_matmul(driver)
     test_accumulator_memory(driver)
     test_dram1(driver)
-    test_load_resnet(driver)
     test_xor(driver)
     driver.close()
     print("Driver object closed")

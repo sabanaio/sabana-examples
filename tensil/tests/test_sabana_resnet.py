@@ -13,7 +13,6 @@
 # limitations under the License.
 
 from tcu_sabana.driver import Driver
-from tcu_sabana.tensil_images import luis
 from collections import namedtuple
 import numpy as np
 import pickle
@@ -94,7 +93,7 @@ def test_resnet(driver):
 
 if __name__ == "__main__":
     print("Initializing driver object")
-    driver = Driver(image=luis, debug=False)
+    driver = Driver(image="luis/tensil:0.1.0", debug=False)
     try:
         test_resnet(driver)
     except Exception as e:

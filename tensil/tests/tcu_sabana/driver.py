@@ -26,6 +26,7 @@ from tcu_pynq.instruction import Layout
 from tcu_pynq.instruction import DataMoveFlag
 from tcu_pynq.config import Register, Constant
 from tcu_pynq.model import model_from_json
+from tcu_pynq.architecture import pynqz1
 
 
 class SabanaSpecific:
@@ -243,9 +244,11 @@ class Driver:
         if debug:
             print("initializing instance")
 
-        self.inst = Instance(image=image.image_name, verbose=debug)
+        if not isinstance(image, str) or len(image) == 0:
+            raise RuntimeError("image must be a non-empty string")
+        self.inst = Instance(image=image, verbose=debug)
         self.is_up = False
-        self.arch = image.arch
+        self.arch = pynqz1
         self.dma_name = "inst"
         self.dram0_name = "d0"
         self.dram1_name = "d1"

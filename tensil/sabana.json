@@ -1,0 +1,26 @@
+{
+  "name": "tensil",
+  "tag": "0.1.0",
+  "language": "verilog",
+  "shell": {
+    "rtl": {
+      "axi4_stream": [
+        {
+          "name": "d0",
+          "data_width": "128",
+          "stream_type": "send"
+        }
+      ],
+      "axi4": [
+        {
+          "name": "m0",
+          "data_width": "128"
+        },
+        {
+          "name": "m1",
+          "data_width": "128"
+        }
+      ]
+    }
+  }
+}

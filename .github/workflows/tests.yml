@@ -41,9 +41,9 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
-        run: python -m pip install pytest sabana==0.1.22
+        run: python -m pip install pytest sabana==0.1.23
       - name: Run examples
         working-directory: ./
         # Do not include any examples with external dependencies here.
         # Add a separate workflow, see pyrtl.yml for reference.
-        run: pytest --ignore=pyrtl_muladd .
+        run: pytest --ignore=pyrtl_muladd --ignore=tensil --ignore=3rd_party .

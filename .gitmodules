@@ -1,0 +1,3 @@
+[submodule "tensil"]
+	path = 3rd_party/tensil
+	url = https://github.com/tensil-ai/tensil.git

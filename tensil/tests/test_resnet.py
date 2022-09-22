@@ -13,13 +13,17 @@
 # limitations under the License.
 
 from tcu_sabana.driver import Driver
-from collections import namedtuple
 import numpy as np
 import pickle
 import time
+import pytest
 
 
-TestCase = namedtuple("TestCase", ["input", "expected"])
+@pytest.fixture(scope="module")
+def driver():
+    drv = Driver(image="luis/tensil:0.1.0", debug=False)
+    yield drv
+    drv.close()
 
 
 def get_img(driver, data, n):
@@ -89,16 +93,3 @@ def test_resnet(driver):
     print()
     print("Result: {} (idx = {})".format(result, result_idx))
     print("Actual: {} (idx = {})".format(label, label_idx))
-
-
-if __name__ == "__main__":
-    print("Initializing driver object")
-    driver = Driver(image="luis/tensil:0.1.0", debug=False)
-    try:
-        test_resnet(driver)
-    except Exception as e:
-        print(str(e))
-        print("Test failed!")
-    finally:
-        driver.close()
-        print("Driver object closed")

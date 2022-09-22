@@ -20,19 +20,17 @@ from collections import namedtuple
 import numpy as np
 import pytest
 
-TestCase = namedtuple("TestCase", ["input", "expected"])
+TCase = namedtuple("TestCase", ["input", "expected"])
+
 
 @pytest.fixture(scope="module")
 def driver():
-    return Driver(image="luis/tensil:0.1.0", debug=False)
-
-
-def func_print(fname, msg):
-    print(f"[{fname}]:\t\t{msg}")
+    drv = Driver(image="luis/tensil:0.1.0", debug=False)
+    yield drv
+    drv.close()
 
 
 def test_local_memory(driver):
-    fname = "local_memory"
     size = driver.arch.local_depth * driver.arch.array_size
     data = np.arange(size, dtype=data_type_numpy(driver.arch.data_type))
     driver.dram0.write(0, data)
@@ -53,11 +51,9 @@ def test_local_memory(driver):
     driver.write_instructions(program)
     result = driver.dram0.read(driver.arch.local_depth * driver.arch.array_size, size)
     np.testing.assert_array_equal(result, data)
-    func_print(fname, "OK - mem transferred")
 
 
 def test_matmul(driver):
-    fname = "matmul"
     size = driver.arch.array_size**2
     data = np.arange(size, dtype=data_type_numpy(driver.arch.data_type))
     weights = np.identity(
@@ -102,11 +98,9 @@ def test_matmul(driver):
     driver.write_instructions(program)
     result = driver.dram0.read(output_address * driver.arch.array_size, size)
     np.testing.assert_array_equal(result, data)
-    func_print(fname, "OK - results match")
 
 
 def test_accumulator_memory(driver):
-    fname = "acc_memory"
     size = driver.arch.accumulator_depth * driver.arch.array_size
     data = np.arange(size, dtype=data_type_numpy(driver.arch.data_type))
     driver.dram0.write(0, data)
@@ -139,11 +133,9 @@ def test_accumulator_memory(driver):
     driver.write_instructions(program)
     result = driver.dram0.read(size, size)
     np.testing.assert_array_equal(result, data)
-    func_print(fname, "OK - results match")
 
 
 def test_dram1(driver):
-    fname = "dram1"
     # write some stuff to dram0
     size = driver.arch.local_depth * driver.arch.array_size
     data = np.arange(size, dtype=data_type_numpy(driver.arch.data_type))
@@ -164,16 +156,14 @@ def test_dram1(driver):
     # read it from dram0
     result = driver.dram0.read(driver.arch.local_depth * driver.arch.array_size, size)
     np.testing.assert_array_equal(result, data)
-    func_print(fname, "OK - data from dram1 matches")
 
 
 def test_xor(driver):
-    fname = "xor_model"
     test_case = [
-        TestCase(input=(0, 0), expected=(0,)),
-        TestCase(input=(0, 1), expected=(1,)),
-        TestCase(input=(1, 0), expected=(1,)),
-        TestCase(input=(1, 1), expected=(0,)),
+        TCase(input=(0, 0), expected=(0,)),
+        TCase(input=(0, 1), expected=(1,)),
+        TCase(input=(1, 0), expected=(1,)),
+        TCase(input=(1, 1), expected=(0,)),
     ]
     driver.load_model("./xor4_pb_pynqz1.tmodel")
     for case in test_case:
@@ -182,17 +172,3 @@ def test_xor(driver):
         output = driver.run({"x": input_})["Identity"]
         expected = pad_to(np.array(case.expected, dtype=dtype), driver.arch.array_size)
         np.testing.assert_allclose(expected, output, atol=1e-02)
-        func_print(fname, f"case {case} OK")
-    func_print(fname, "OK - all cases")
-
-
-if __name__ == "__main__":
-    print("Initializing driver object...")
-    driver = Driver(image="luis/tensil:0.1.0", debug=False)
-    test_local_memory(driver)
-    test_matmul(driver)
-    test_accumulator_memory(driver)
-    test_dram1(driver)
-    test_xor(driver)
-    driver.close()
-    print("Driver object closed")

@@ -29,9 +29,7 @@ from tcu_pynq.model import model_from_json
 from tcu_pynq.architecture import pynqz1
 
 
-def buffer_chunk_write(
-    data=None, buffer=None, inst=None, offset=None, chunk_size=None
-):
+def buffer_chunk_write(data=None, buffer=None, inst=None, offset=None, chunk_size=None):
     """
     Executes buffer writes in chunks of 1MBytes, the largest
     supported payload by xfer in Sabana
@@ -39,9 +37,7 @@ def buffer_chunk_write(
     if not isinstance(data, np.ndarray):
         raise RuntimeError("Buffer chunk write error: data must be a numpy array")
     if (not isinstance(buffer, str)) or (len(buffer) == 0):
-        raise RuntimeError(
-            "Buffer chunk write error: buffer must be non empty string"
-        )
+        raise RuntimeError("Buffer chunk write error: buffer must be non empty string")
     if not isinstance(offset, int) or offset < 0:
         raise RuntimeError(
             "Buffer chunk write error: offset needds to be a positive integer"
@@ -357,9 +353,7 @@ class Driver:
             print(str(e))
             raise RuntimeError(msg)
 
-        buffer_chunk_write(
-            data=data, buffer=buffer_name, offset=0, inst=self.inst
-        )
+        buffer_chunk_write(data=data, buffer=buffer_name, offset=0, inst=self.inst)
 
         sprog = Program()
         sprog.dma_send_write(name=self.dma_name, src="b_inst")

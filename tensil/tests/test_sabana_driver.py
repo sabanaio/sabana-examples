@@ -18,9 +18,13 @@ from tcu_pynq.util import pad_to
 from tcu_sabana.driver import Driver
 from collections import namedtuple
 import numpy as np
-
+import pytest
 
 TestCase = namedtuple("TestCase", ["input", "expected"])
+
+@pytest.fixture(scope="module")
+def driver():
+    return Driver(image="luis/tensil:0.1.0", debug=False)
 
 
 def func_print(fname, msg):

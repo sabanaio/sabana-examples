@@ -28,7 +28,7 @@ Refer to the `README.md` file on each project for further details.
 
 # Support
 
-For support get in touch with us via our [Discord](https://discord.gg/2tNRW2yfzT) server, or alternatively via [Sabana.io](https://sabana.io).
+For support get in touch with us via our [Discord](https://discord.gg/TwzbFDBFcm) server, or alternatively via [Sabana.io](https://sabana.io).
 
 ## Limited Availability - Join our wait list!
 

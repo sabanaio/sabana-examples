@@ -39,11 +39,11 @@ def create_program(a, b):
     dtype = np.int32
     start = np.ones([1], dtype=np.int32)
     finish = np.array([14], dtype=np.int32)
-    length = np.array([n], dtype=np.int32);
+    length = np.array([n], dtype=np.int32)
     program = Program()
     program.mmio_alloc(name="c0", size=0x00010000, base_address=0xA0000000)
     program.buffer_alloc(name="a", size=a.nbytes, mmio_name="c0", mmio_offset=0x18)
-    program.buffer_alloc(name="y", size=a.nbytes, mmio_name="c0", mmio_offset=0x2c)
+    program.buffer_alloc(name="y", size=a.nbytes, mmio_name="c0", mmio_offset=0x2C)
     program.buffer_write(a, name="a", offset=0)
     program.mmio_write(b, name="c0", offset=0x10)
     program.mmio_write(length, name="c0", offset=0x24)

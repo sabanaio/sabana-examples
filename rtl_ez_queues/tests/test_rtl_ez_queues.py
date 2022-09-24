@@ -41,7 +41,7 @@ def create_program(a, b):
     assert n <= 63
     start = np.ones([1], dtype=np.int32)
     finish = np.array([14], dtype=np.int32)
-    length = np.array([n], dtype=np.int32);
+    length = np.array([n], dtype=np.int32)
     program = Program()
     program.mmio_alloc(name="c0", size=0x00010000, base_address=0xA0000000)
     program.buffer_alloc(name="a", size=nbytes, mmio_name="c0", mmio_offset=0x10)
@@ -49,7 +49,7 @@ def create_program(a, b):
     program.buffer_alloc(name="y", size=nbytes, mmio_name="c0", mmio_offset=0x38)
     program.buffer_write(a, name="a", offset=0)
     program.buffer_write(b, name="b", offset=0)
-    program.mmio_write(length, name="c0", offset=0x1c)
+    program.mmio_write(length, name="c0", offset=0x1C)
     program.mmio_write(length, name="c0", offset=0x30)
     program.mmio_write(length, name="c0", offset=0x44)
     program.mmio_write(start, name="c0", offset=0x0)

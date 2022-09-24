@@ -15,65 +15,59 @@
 from pathlib import Path
 import numpy as np
 from sabana import Instance, Program
-from random import randint
-
-
-def create_program(ai, bi):
-    a = np.array([ai], dtype=np.int32)
-    b = np.array([bi], dtype=np.int32)
-    start = np.array([1], dtype=np.int32)
-    finish = np.array([14], dtype=np.int32)
-    # create a program
-    ctrl = "c0"
-    program = Program()
-    program.mmio_alloc(name=ctrl, size=0x00010000, base_address=0xA0000000)
-    program.mmio_write(a, name=ctrl, offset=0x10)
-    program.mmio_write(b, name=ctrl, offset=0x18)
-    program.mmio_write(start, name=ctrl, offset=0x0)
-    program.mmio_wait(finish, name=ctrl, offset=0x0, timeout=1)
-    program.mmio_read(name=ctrl, offset=0x20, dtype=a.dtype.type, shape=a.shape)
-    program.mmio_dealloc(name=ctrl)
-    return program
 
 
 class Driver:
-    def __init__(self):
-        print("Every run is a round-trip to a cloud FPGA...")
-        print("Initializing instance...")
-        image_file = Path(__file__).resolve().parent.parent.joinpath("sabana.json")
-        self.inst = Instance(image_file=image_file)
+    def __init__(self, image=None):
+        if image:
+            self.inst = Instance(image=image, verbose=True)
+        else:
+            file = Path(__file__).resolve().parent.parent.joinpath("sabana.json")
+            self.inst = Instance(image_file=file, verbose=True)
+
         self.inst.up()
 
     def run(self, program):
         return self.inst.execute(program)
 
     def __del__(self):
-        print("Terminating instance...")
         self.inst.down()
 
 
-def create_function():
-    driver = Driver()
+def create_program(a, b):
+    start = np.array([1], dtype=np.int32)
+    finish = np.array([14], dtype=np.int32)
+    program = Program()
+    program.mmio_alloc(name="c0", size=0x00010000, base_address=0xA0000000)
+    program.mmio_write(a, name="c0", offset=0x10)
+    program.mmio_write(b, name="c0", offset=0x18)
+    program.mmio_write(start, name="c0", offset=0x0)
+    program.mmio_wait(finish, name="c0", offset=0x0, timeout=1)
+    program.mmio_read(name="c0", offset=0x20, dtype=np.int8, shape=(4,))
+    program.mmio_dealloc(name="c0")
+    return program
+
+
+def create_function(image=None):
+    driver = Driver(image)
 
     def func(a, b):
         prog = create_program(a, b)
         res = driver.run(prog)
-        return res[0][0]
+        return res[0]
 
     return func
 
 
 def test_main():
+    n = 4
+    m = 32
+    a = np.random.randint(m, size=(n,), dtype=np.int8)
+    b = np.random.randint(m, size=(n,), dtype=np.int8)
     f = create_function()
-    m = 8192
-
-    for i in range(5):
-        a = randint(0, m)
-        b = randint(0, m)
-        exp = a + b
-        res = f(a, b)
-        print(f"run:{i} python:{exp} fpga:{res}")
-        assert exp == res
+    res = f(a, b)
+    assert np.array_equal(res, a + b)
+    print("Vector addition passed")
 
 
 if __name__ == "__main__":

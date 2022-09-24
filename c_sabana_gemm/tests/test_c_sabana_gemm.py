@@ -17,13 +17,26 @@ import numpy as np
 from sabana import Instance, Program
 
 
-def test_main():
-    # create inputs
-    start = np.ones([1], np.int32)
-    finish = np.array([14], np.int32)
-    a = np.random.randint(255, size=(4, 4), dtype=np.int32)
-    b = np.random.randint(255, size=(4, 4), dtype=np.int32)
-    # create a program
+class Driver:
+    def __init__(self, image=None):
+        if image:
+            self.inst = Instance(image=image, verbose=True)
+        else:
+            file = Path(__file__).resolve().parent.parent.joinpath("sabana.json")
+            self.inst = Instance(image_file=file, verbose=True)
+
+        self.inst.up()
+
+    def run(self, program):
+        return self.inst.execute(program)
+
+    def __del__(self):
+        self.inst.down()
+
+
+def create_program(a, b):
+    start = np.ones([1], dtype=np.uint32)
+    finish = np.array([14], dtype=np.uint32)
     program = Program()
     program.mmio_alloc(name="c0", size=0x00010000, base_address=0xA0000000)
     program.buffer_alloc(name="a", size=a.nbytes, mmio_name="c0", mmio_offset=0x10)
@@ -33,25 +46,34 @@ def test_main():
     program.buffer_write(b, name="b", offset=0)
     program.mmio_write(start, name="c0", offset=0x0)
     program.mmio_wait(finish, name="c0", offset=0x0, timeout=4)
-    program.buffer_read(name="c", offset=0, dtype=np.int32, shape=a.shape)
+    program.buffer_read(name="c", offset=0, dtype=np.uint32, shape=a.shape)
     program.mmio_dealloc(name="c0")
     program.buffer_dealloc(name="a")
     program.buffer_dealloc(name="b")
     program.buffer_dealloc(name="c")
-    # deploy instance
-    image_file = Path(__file__).resolve().parent.parent.joinpath("sabana.json")
-    inst = Instance(image_file=image_file, verbose=True)
-    # if you want to test the image without building it
-    # uncomment the following line:
-    # inst = Instance(image="robot/c_sabana_gemm:0.1.0", verbose=True)
-    inst.up()
-    # run program
-    responses = inst.execute(program)
-    # terminate instance
-    inst.down()
-    # check results
-    assert np.array_equal(responses[3], np.matmul(a, b))
-    print("Multiplied two random 4x4 matrices successfully!")
+    return program
+
+
+def create_function(image=None):
+    driver = Driver(image)
+
+    def func(a, b):
+        prog = create_program(a, b)
+        res = driver.run(prog)
+        return res[3]
+
+    return func
+
+
+def test_main():
+    n = 4
+    m = 32
+    a = np.random.randint(m, size=(n, n), dtype=np.uint32)
+    b = np.random.randint(m, size=(n, n), dtype=np.uint32)
+    f = create_function()
+    res = f(a, b)
+    assert np.array_equal(res, np.matmul(a, b))
+    print("Matrix multiplication passed")
 
 
 if __name__ == "__main__":

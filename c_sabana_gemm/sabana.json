@@ -3,60 +3,62 @@
   "tag": "0.1.0",
   "language": "cpp",
   "shell": {
-    "axi4_lite": [
-      {
-        "name": "c0",
-        "data_width": "32",
-        "mmio": {
-          "base_address": "0xa0000000",
-          "size": "0x00010000",
-          "values": [
-            {
-              "name": "control",
-              "offset": "0x00",
-              "data_type": "int32"
-            },
+    "hls": {
+      "axi4_lite": [
+        {
+          "name": "c0",
+          "data_width": "32",
+          "mmio": {
+            "base_address": "0xa0000000",
+            "size": "0x00010000",
+            "values": [
+              {
+                "name": "control",
+                "offset": "0x00",
+                "data_type": "int32"
+              },
+              {
+                "name": "a",
+                "offset": "0x10",
+                "data_type": "int64"
+              },
+              {
+                "name": "b",
+                "offset": "0x1c",
+                "data_type": "int64"
+              },
+              {
+                "name": "c",
+                "offset": "0x28",
+                "data_type": "int64"
+              }
+            ]
+          }
+        }
+      ],
+      "axi4": [
+        {
+          "name": "m0",
+          "data_width": "32",
+          "args": [
             {
               "name": "a",
-              "offset": "0x10",
-              "data_type": "int64"
+              "data_type": "int32",
+              "state": "read"
             },
             {
               "name": "b",
-              "offset": "0x1c",
-              "data_type": "int64"
+              "data_type": "int32",
+              "state": "read"
             },
             {
               "name": "c",
-              "offset": "0x28",
-              "data_type": "int64"
+              "data_type": "int32",
+              "state": "readwrite"
             }
           ]
         }
-      }
-    ],
-    "axi4": [
-      {
-        "name": "m0",
-        "data_width": "32",
-        "args": [
-          {
-            "name": "a",
-            "data_type": "int32",
-            "state": "read"
-          },
-          {
-            "name": "b",
-            "data_type": "int32",
-            "state": "read"
-          },
-          {
-            "name": "c",
-            "data_type": "int32",
-            "state": "readwrite"
-          }
-        ]
-      }
-    ]
+      ]
+    }
   }
 }

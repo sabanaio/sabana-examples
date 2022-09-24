@@ -15,6 +15,7 @@
 module sabana (
   input  logic            clock,
   input  logic            reset,
+  // AXI4-Lite (c0)
   input  logic            s_axi_c0_awvalid,
   output logic            s_axi_c0_awready,
   input  logic [32-1:0]   s_axi_c0_awaddr,
@@ -32,6 +33,7 @@ module sabana (
   output logic            s_axi_c0_bvalid,
   input  logic            s_axi_c0_bready,
   output logic [2-1:0]    s_axi_c0_bresp,
+  // AXI4 (m0)
   input  logic            m_axi_m0_awready,
   output logic            m_axi_m0_awvalid,
   output logic [6-1:0]    m_axi_m0_awid,

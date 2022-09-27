@@ -93,3 +93,12 @@ def test_resnet(driver):
     print()
     print("Result: {} (idx = {})".format(result, result_idx))
     print("Actual: {} (idx = {})".format(label, label_idx))
+
+
+if __name__ == "__main__":
+    try:
+        drv = Driver(image="luis/tensil:0.1.0", debug=False)
+        test_resnet(drv)
+    finally:
+        if isinstance(drv, Driver):
+            drv.close()

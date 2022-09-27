@@ -172,3 +172,16 @@ def test_xor(driver):
         output = driver.run({"x": input_})["Identity"]
         expected = pad_to(np.array(case.expected, dtype=dtype), driver.arch.array_size)
         np.testing.assert_allclose(expected, output, atol=1e-02)
+
+
+if __name__ == "__main__":
+    try:
+        drv = Driver(image="luis/tensil:0.1.0", debug=False)
+        test_local_memory(drv)
+        test_matmul(drv)
+        test_accumulator_memory(drv)
+        test_dram1(drv)
+        test_xor(drv)
+    finally:
+        if isinstance(drv, Driver):
+            drv.close()

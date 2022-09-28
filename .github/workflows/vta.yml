@@ -21,6 +21,6 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
-        run: python -m pip install pytest pyrtl sabana==0.1.22
+        run: python -m pip install pytest pyrtl sabana==0.1.24
       - name: Run VTA ISA tests
         run: python ./vta/tests/test_vta.py

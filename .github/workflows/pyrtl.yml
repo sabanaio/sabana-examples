@@ -28,7 +28,7 @@ jobs:
           python ./pyrtl_muladd/tests/pyrtl_muladd.py
       - name: Download sabana CLI
         run: |
-          curl https://sabana.s3.us-west-2.amazonaws.com/cli/sabana_linux_x86_64_v0.1.4.tar.gz --output sabana.tar.gz && tar xf sabana.tar.gz && rm sabana.tar.gz
+          curl https://sabana.s3.us-west-2.amazonaws.com/cli/sabana_linux_x86_64_v0.1.8.tar.gz --output sabana.tar.gz && tar xf sabana.tar.gz && rm sabana.tar.gz
       - name: Push project
         run: |
           cd pyrtl_muladd && ../sabana push

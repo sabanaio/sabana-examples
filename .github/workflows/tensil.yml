@@ -28,7 +28,6 @@ jobs:
         working-directory: ./tensil/tests
         run: bash diagnostics.sh
 
-jobs:
   run-tensil-resnet20:
     runs-on: ${{ matrix.os }}
     strategy:

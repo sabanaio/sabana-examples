@@ -26,7 +26,23 @@ from tcu_pynq.instruction import Layout
 from tcu_pynq.instruction import DataMoveFlag
 from tcu_pynq.config import Register, Constant
 from tcu_pynq.model import model_from_json
-from tcu_pynq.architecture import pynqz1
+from tcu_pynq.data_type import DataType
+from tcu_pynq.architecture import Architecture
+
+
+tensil = Architecture(
+    data_type=DataType.FP16BP8,
+    array_size=8,
+    dram0_depth=1048576,
+    dram1_depth=1048576,
+    local_depth=8192,
+    accumulator_depth=2048,
+    simd_registers_depth=1,
+    stride0_depth=8,
+    stride1_depth=8,
+    number_of_threads=1,
+    thread_queue_depth=8,
+)
 
 
 def buffer_chunk_write(data=None, buffer=None, inst=None, offset=None, chunk_size=None):
@@ -236,7 +252,7 @@ class Driver:
             raise RuntimeError("image must be a non-empty string")
         self.inst = Instance(image=image, verbose=debug)
         self.is_up = False
-        self.arch = pynqz1
+        self.arch = tensil
         self.dma_name = "inst"
         self.dram0_name = "d0"
         self.dram1_name = "d1"

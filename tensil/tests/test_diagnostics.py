@@ -165,7 +165,7 @@ def test_xor(driver):
         TCase(input=(1, 0), expected=(1,)),
         TCase(input=(1, 1), expected=(0,)),
     ]
-    driver.load_model("./xor4_pb_pynqz1.tmodel")
+    driver.load_model("./xor4_pb_tensil.tmodel")
     for case in test_case:
         dtype = data_type_numpy(driver.arch.data_type)
         input_ = pad_to(np.array(case.input, dtype=dtype), driver.arch.array_size)
@@ -176,7 +176,7 @@ def test_xor(driver):
 
 if __name__ == "__main__":
     try:
-        drv = Driver(image="luis/tensil:0.1.0", debug=False)
+        drv = Driver(image="robot/tensil:0.1.0", debug=False)
         test_local_memory(drv)
         test_matmul(drv)
         test_accumulator_memory(drv)

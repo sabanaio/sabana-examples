@@ -73,7 +73,7 @@ def test_resnet(driver):
     label_idx, label = get_label(labels, label_names, n)
 
     print("Loading model into TCU...")
-    driver.load_model("./resnet20v2_cifar_onnx_pynqz1.tmodel")
+    driver.load_model("./resnet20v2_cifar_onnx_tensil.tmodel")
     print("Model load done")
     inputs = {"x:0": img}
 
@@ -97,7 +97,7 @@ def test_resnet(driver):
 
 if __name__ == "__main__":
     try:
-        drv = Driver(image="luis/tensil:0.1.0", debug=False)
+        drv = Driver(image="robot/tensil:0.1.0", debug=False)
         test_resnet(drv)
     finally:
         if isinstance(drv, Driver):

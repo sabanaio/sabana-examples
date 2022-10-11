@@ -16,10 +16,8 @@ from tcu_sabana.driver import Driver
 import numpy as np
 import pickle
 import time
-import pytest
 
 
-@pytest.fixture(scope="module")
 def driver():
     drv = Driver(image="luis/tensil:0.1.0", debug=False)
     yield drv

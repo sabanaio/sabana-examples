@@ -18,7 +18,6 @@ import pickle
 import time
 
 
-
 def get_img(driver, data, n):
     data_norm = data.astype("float32") / 255
     data_mean = np.mean(data_norm, axis=0)

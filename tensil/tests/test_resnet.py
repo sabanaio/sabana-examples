@@ -18,12 +18,6 @@ import pickle
 import time
 
 
-def driver():
-    drv = Driver(image="luis/tensil:0.1.0", debug=False)
-    yield drv
-    drv.close()
-
-
 def get_img(driver, data, n):
     data_norm = data.astype("float32") / 255
     data_mean = np.mean(data_norm, axis=0)
